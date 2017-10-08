@@ -1,10 +1,19 @@
 ﻿#ifdef BUMP
 	#if BUMPDIRECTUV == 1
 		#define vBumpUV vMainUV1
+		#ifdef WATERBUMP
+		#define vBumpUV2 vMainUV1
+		#endif
 	#elif BUMPDIRECTUV == 2
 		#define vBumpUV vMainUV2
+		#ifdef WATERBUMP
+		#define vBumpUV2 vMainUV2
+		#endif
 	#else
 		varying vec2 vBumpUV;
+		#ifdef WATERBUMP
+		varying vec2 vBumpUV2;
+		#endif
 	#endif
 	uniform sampler2D bumpSampler;
 #if defined(TANGENT) && defined(NORMAL) 

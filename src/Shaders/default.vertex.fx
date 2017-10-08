@@ -59,6 +59,9 @@ varying vec2 vSpecularUV;
 #if defined(BUMP) && BUMPDIRECTUV == 0
 varying vec2 vBumpUV;
 #endif
+#ifdef WATERBUMP
+varying vec2 vBumpUV2;
+#endif
 
 // Output
 varying vec3 vPositionW;
@@ -210,13 +213,27 @@ void main(void) {
 #endif
 
 #if defined(BUMP) && BUMPDIRECTUV == 0
+	// bm[2][0] = 0.; //bumpmap uoffset
+	// bm[2][1] = 0.; //bumpmap voffset
 	if (vBumpInfos.x == 0.)
 	{
 		vBumpUV = vec2(bumpMatrix * vec4(uv, 1.0, 0.0));
+		#ifdef WATERBUMP
+			mat4 bm = mat4(bumpMatrix);
+			bm[2][0] = bm[2][0] * -1.2 + 0.5;
+			bm[2][1] = bm[2][1] * -0.7 - 0.5;
+			vBumpUV2 = vec2(bm * vec4(uv, 1.0, 0.0));
+		#endif
 	}
 	else
 	{
 		vBumpUV = vec2(bumpMatrix * vec4(uv2, 1.0, 0.0));
+		#ifdef WATERBUMP
+			mat4 bm = mat4(bumpMatrix);
+			bm[2][0] = bm[2][0] * -1.2 + 0.5;
+			bm[2][1] = bm[2][1] * -0.7 - 0.5;
+			vBumpUV2 = vec2(bm * vec4(uv2, 1.0, 0.0));
+		#endif
 	}
 #endif
 
