@@ -25,5 +25,7 @@
 #endif
 
 #ifdef BUMP
+	#ifndef WATERBUMP //defined after diffuse colour if WATERBUMP defined
 	normalW = perturbNormal(TBN, vBumpUV + uvOffset);
+	#endif
 #endif

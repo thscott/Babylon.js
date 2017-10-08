@@ -15,6 +15,7 @@ module BABYLON {
         public SPECULAR = false;
         public SPECULARDIRECTUV = 0;
         public BUMP = false;
+        public WATERBUMP = false;
         public BUMPDIRECTUV = 0;
         public PARALLAX = false;
         public PARALLAXOCCLUSION = false;
@@ -287,6 +288,14 @@ module BABYLON {
         private _twoSidedLighting = false;
         @expandToProperty("_markAllSubMeshesAsTexturesDirty")
         public twoSidedLighting: boolean;     
+
+        /**
+         * If set to true, the given normal map will be used twice, sliding over itself to simulate water
+         */
+        @serialize("waterBump")
+        private _waterBump = false;
+        @expandToProperty("_markAllSubMeshesAsTexturesDirty")
+        public waterBump: boolean;     
 
         /**
          * Default configuration related to image processing available in the standard Material.
@@ -659,6 +668,7 @@ module BABYLON {
 
                             defines.PARALLAX = this._useParallax;
                             defines.PARALLAXOCCLUSION = this._useParallaxOcclusion;
+                            defines.WATERBUMP = this._waterBump;
                         }
                     } else {
                         defines.BUMP = false;

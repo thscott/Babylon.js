@@ -192,6 +192,15 @@ void main(void) {
 	baseColor.rgb *= vDiffuseInfos.y;
 #endif
 
+//moved here from bumpFragment so can access the colour
+#ifdef BUMP
+	#ifdef WATERBUMP
+	vec3 b1 = perturbNormal(TBN, vBumpUV + uvOffset) - normalW;;
+	vec3 b2 = perturbNormal(TBN, vBumpUV2 + uvOffset) - normalW;
+	normalW = (b1 + b2) / 2. * baseColor.b + normalW;
+	#endif
+#endif
+
 #include<depthPrePass>
 
 #ifdef VERTEXCOLOR
