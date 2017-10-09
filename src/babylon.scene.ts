@@ -1432,6 +1432,9 @@
                     let pi = new PointerInfoPre(type, evt, this._unTranslatedPointerX, this._unTranslatedPointerY);
                     this.onPrePointerObservable.notifyObservers(pi, type);
                     if (pi.skipOnPointerObservable) {
+                        this._startingPointerPosition.x = this._pointerX; //myChange, not sure if these are still needed
+                        this._startingPointerPosition.y = this._pointerY; //myChange
+                        this._startingPointerTime = new Date().getTime(); //myChange
                         return;
                     }
                 }

@@ -206,11 +206,11 @@
             var minimum = new Vector3(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
             var maximum = new Vector3(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
 
+            let current = BABYLON.Vector3.Zero(); //myChange, along with the three lines in for loop
             for (var index = indexStart; index < indexStart + indexCount; index++) {
-                var current = new Vector3(positions[indices[index] * 3], positions[indices[index] * 3 + 1], positions[indices[index] * 3 + 2]);
-
-                minimum = Vector3.Minimize(current, minimum);
-                maximum = Vector3.Maximize(current, maximum);
+                current.copyFromFloats(positions[indices[index] * 3], positions[indices[index] * 3 + 1], positions[indices[index] * 3 + 2]);
+                minimum.MinimizeInPlace(current);
+                maximum.MaximizeInPlace(current);
             }
 
             if (bias) {
@@ -236,11 +236,11 @@
                 stride = 3;
             }
 
+            let current = BABYLON.Vector3.Zero(); //myChange, along with the three lines in for loop
             for (var index = start; index < start + count; index++) {
-                var current = new Vector3(positions[index * stride], positions[index * stride + 1], positions[index * stride + 2]);
-
-                minimum = Vector3.Minimize(current, minimum);
-                maximum = Vector3.Maximize(current, maximum);
+                current.copyFromFloats(positions[index * stride], positions[index * stride + 1], positions[index * stride + 2]);
+                minimum.MinimizeInPlace(current);
+                maximum.MaximizeInPlace(current);
             }
 
             if (bias) {
