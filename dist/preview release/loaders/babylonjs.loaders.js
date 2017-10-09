@@ -5469,6 +5469,10 @@ var BABYLON;
                         }
                     });
                 };
+                /**
+                 * Specify the minimal delay between LODs in ms (default = 250)
+                 */
+                MSFTLOD.MinimalLODDelay = 250;
                 return MSFTLOD;
             }(GLTF2.GLTFLoaderExtension));
             Extensions.MSFTLOD = MSFTLOD;

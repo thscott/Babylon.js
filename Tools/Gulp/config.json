@@ -160,6 +160,37 @@
         ],
         "distributed": [
             "minimalGLTFViewer"
+        ],       
+        "smaller": [
+            "standardMaterial",
+            "arcRotateCamera",
+            "hemisphericLight",
+            "directionalLight",
+            "actions",
+            "picking",
+            "solidParticles",
+            "meshBuilder",
+            "additionalTextures",
+            "shadows",
+            "loader",
+            "offline",
+            "multiMaterial",
+            "defaultRenderingPipeline",
+            "depthRenderer",
+            "geometryBufferRenderer",
+            "additionalPostProcesses",
+            "polygonMesh",
+            "textureFormats",
+            "debug",
+            "colorCurves",
+            "octrees",
+            "simd",
+            "optimizations",
+            "highlights",
+            "assetsManager",
+            "dynamicFloatArray",
+            "imageProcessing",
+            "serialization"
         ]
     },
     "workloads": {
