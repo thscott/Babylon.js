@@ -195,9 +195,16 @@ void main(void) {
 //moved here from bumpFragment so can access the colour
 #ifdef BUMP
 	#ifdef WATERBUMP
-	vec3 b1 = perturbNormal(TBN, vBumpUV + uvOffset) - normalW;;
+	// float isWater = step(0., baseColor.b - baseColor.g) * step(0., baseColor.b - baseColor.r);
+	// isWater *= step(0., baseColor.g - baseColor.r); //filter browns
+	float isWater = step(1.15, baseColor.b / baseColor.g) * step(1.3, baseColor.b / baseColor.r);
+	// isWater *= step(1.05, baseColor.g / baseColor.r); //filter browns
+	isWater *= step(baseColor.r + baseColor.g + baseColor.b, 2.5); //filter out white
+	isWater += step(baseColor.r + baseColor.g + baseColor.b, 0.05); //* step(baseColor.g / baseColor.r, 1.) * step(baseColor.g / baseColor.b, 1.); //deep black is likely water
+	isWater = clamp(isWater, 0., 1.);
+	vec3 b1 = perturbNormal(TBN, vBumpUV + uvOffset) - normalW;
 	vec3 b2 = perturbNormal(TBN, vBumpUV2 + uvOffset) - normalW;
-	normalW = (b1 + b2) / 2. * baseColor.b + normalW;
+	normalW = (b1 + b2) / 2. * isWater + normalW;
 	#endif
 #endif
 
@@ -218,6 +225,9 @@ void main(void) {
 #ifdef SPECULARTERM
 	float glossiness = vSpecularColor.a;
 	vec3 specularColor = vSpecularColor.rgb;
+	#ifdef WATERBUMP
+	specularColor *= isWater;
+	#endif
 
 #ifdef SPECULAR
 	vec4 specularMapColor = texture2D(specularSampler, vSpecularUV + uvOffset);

@@ -207,6 +207,18 @@ gulp.task("build", ["shaders"], function () {
         .pipe(gulp.dest(config.build.outputDirectory));
 });
 
+gulp.task("buildCopy", ["build"], function () {
+    let typings = "../../dist/preview release/babylon.module.d.ts";
+    let jsFile = "../../dist/preview release/babylon.max.js";
+    let dest = "../../../custombabylonjs";
+    gulp.src(typings)
+        .pipe(rename("babylon.d.ts"))
+        .pipe(gulp.dest(dest));
+    gulp.src(jsFile)
+        .pipe(rename("babylon.js"))
+        .pipe(gulp.dest(dest));
+});
+
 /*
 * Compiles all typescript files and creating a js and a declaration file.
 */
