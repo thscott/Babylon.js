@@ -40,3 +40,7 @@ uniform mat4 bumpMatrix;
 #ifdef POINTSIZE
 	uniform float pointSize;
 #endif
+
+#ifdef SUNROT
+	uniform mat4 sunRot;
+#endif

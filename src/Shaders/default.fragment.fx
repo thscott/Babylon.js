@@ -129,6 +129,9 @@ uniform samplerCube reflectionCubeSampler;
 #else
 uniform sampler2D reflection2DSampler;
 #endif
+// #ifdef SUNROT
+// uniform mat4 sunRot;
+// #endif
 
 #ifdef REFLECTIONMAP_SKYBOX
 varying vec3 vPositionUVW;
@@ -296,9 +299,17 @@ void main(void) {
 	#endif
 #endif
 
+	#ifdef WATERBUMP
+	reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot), bias).rgb * vReflectionInfos.x;
+	#else
 	reflectionColor = textureCube(reflectionCubeSampler, vReflectionUVW, bias).rgb * vReflectionInfos.x;
+	#endif
 #else
+	#ifdef WATERBUMP
+	reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot)).rgb * vReflectionInfos.x;
+	#else
 	reflectionColor = textureCube(reflectionCubeSampler, vReflectionUVW).rgb * vReflectionInfos.x;
+	#endif
 #endif
 
 #else
@@ -401,9 +412,17 @@ void main(void) {
 
 	// Composition
 #ifdef EMISSIVEASILLUMINATION
-	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor + finalSpecular + reflectionColor + emissiveColor + refractionColor, 0.0, 1.0), alpha);
+	#ifdef WATERBUMP
+	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + emissiveColor + refractionColor, 0.0, 1.0), alpha);
+	#else
+	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor + finalSpecular + emissiveColor + reflectionColor + refractionColor, 0.0, 1.0), alpha);
+	#endif
 #else
+	#ifdef WATERBUMP
+	vec4 color = vec4(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + refractionColor, alpha);
+	#else
 	vec4 color = vec4(finalDiffuse * baseAmbientColor + finalSpecular + reflectionColor + refractionColor, alpha);
+	#endif
 #endif
 
 //Old lightmap calculation method
