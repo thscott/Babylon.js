@@ -16,6 +16,7 @@ module BABYLON {
         public SPECULARDIRECTUV = 0;
         public BUMP = false;
         public WATERBUMP = false;
+        public SUNROT = true;
         public BUMPDIRECTUV = 0;
         public PARALLAX = false;
         public PARALLAXOCCLUSION = false;
@@ -295,7 +296,15 @@ module BABYLON {
         @serialize("waterBump")
         private _waterBump = false;
         @expandToProperty("_markAllSubMeshesAsTexturesDirty")
-        public waterBump: boolean;     
+        public waterBump: boolean;
+
+        /**
+         * If set to true, the will use the passed in rotation matrix for the lightmap (to simulate sun pos)
+         */
+        @serialize("sunRot")
+        private _sunRot: Matrix;
+        @expandToProperty("_markAllSubMeshesAsTexturesDirty")
+        public sunRot: Matrix;
 
         /**
          * Default configuration related to image processing available in the standard Material.
@@ -743,6 +752,8 @@ module BABYLON {
                 }
             }
 
+            // defines.SUNROT = !!this._sunRot;
+
             // Misc.
             MaterialHelper.PrepareDefinesForMisc(mesh, scene, this._useLogarithmicDepth, this.pointsCloud, this.fogEnabled, defines);
 
@@ -936,6 +947,8 @@ module BABYLON {
             this._uniformBuffer.addUniform("vEmissiveColor", 3);
             this._uniformBuffer.addUniform("vDiffuseColor", 4);
             this._uniformBuffer.addUniform("pointSize", 1);
+            
+            this._uniformBuffer.addUniform("sunRot", 16);
 
             this._uniformBuffer.create();
         }
@@ -1070,6 +1083,10 @@ module BABYLON {
                     // Point size
                     if (this.pointsCloud) {
                         this._uniformBuffer.updateFloat("pointSize", this.pointSize);
+                    }
+
+                    if (this._sunRot) {
+                        this._uniformBuffer.updateMatrix("sunRot", this._sunRot);
                     }
 
                     if (defines.SPECULARTERM) {

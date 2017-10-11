@@ -34,6 +34,7 @@ uniform Material
 	vec3 vEmissiveColor;
 	vec4 vDiffuseColor;
 	float pointSize; 
+	mat4 sunRot;
 };
 
 uniform Scene {

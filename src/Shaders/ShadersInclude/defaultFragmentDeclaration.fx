@@ -83,3 +83,7 @@ uniform vec4 reflectionRightColor;
 #endif
 
 #endif
+
+#ifdef SUNROT
+	uniform mat4 sunRot;
+#endif
