@@ -16,6 +16,7 @@ module BABYLON {
         public SPECULARDIRECTUV = 0;
         public BUMP = false;
         public WATERBUMP = false;
+        public ISMAPTILE = false;
         public SUNROT = false;
         public GLOBEVIEW = false;
         public BUMPDIRECTUV = 0;
@@ -319,6 +320,14 @@ module BABYLON {
         public globeView: boolean;
 
         /**
+         * If set to true, will set the normals to the positions (as origin 0,0,0);
+         */
+        @serialize("isMapTile")
+        private _isMapTile = false;
+        @expandToProperty("_markAllSubMeshesAsTexturesDirty")
+        public isMapTile: boolean;
+
+        /**
          * Default configuration related to image processing available in the standard Material.
          */
         protected _imageProcessingConfiguration: ImageProcessingConfiguration;
@@ -570,6 +579,7 @@ module BABYLON {
                 defines.MAINUV1 = false;
                 defines.MAINUV2 = false;
                 defines.GLOBEVIEW = this.globeView;
+                defines.ISMAPTILE = this._isMapTile;
                 if (scene.texturesEnabled) {
                     if (this._diffuseTexture && StandardMaterial.DiffuseTextureEnabled) {
                         if (!this._diffuseTexture.isReadyOrNotBlocking()) {
