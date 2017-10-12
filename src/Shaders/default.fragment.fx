@@ -129,9 +129,6 @@ uniform samplerCube reflectionCubeSampler;
 #else
 uniform sampler2D reflection2DSampler;
 #endif
-// #ifdef SUNROT
-// uniform mat4 sunRot;
-// #endif
 
 #ifdef REFLECTIONMAP_SKYBOX
 varying vec3 vPositionUVW;
@@ -214,7 +211,7 @@ void main(void) {
 #include<depthPrePass>
 
 #ifdef VERTEXCOLOR
-	baseColor.rgb *= vColor.rgb;
+	// baseColor.rgb *= vColor.rgb;
 #endif
 
 	// Ambient color
@@ -299,14 +296,22 @@ void main(void) {
 	#endif
 #endif
 
-	#ifdef WATERBUMP
-	reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot), bias).rgb * vReflectionInfos.x;
+	#ifdef SUNROT
+		#ifdef GLOBEVIEW
+			reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot), bias).rgb * vReflectionInfos.x;
+		#else
+			reflectionColor = textureCube(reflectionCubeSampler,  normalize(vColor.rgb) * mat3(sunRot), bias).rgb * vReflectionInfos.x;
+		#endif
 	#else
 	reflectionColor = textureCube(reflectionCubeSampler, vReflectionUVW, bias).rgb * vReflectionInfos.x;
 	#endif
 #else
-	#ifdef WATERBUMP
-	reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot)).rgb * vReflectionInfos.x;
+	#ifdef SUNROT
+		#ifdef GLOBEVIEW
+			reflectionColor = textureCube(reflectionCubeSampler, normalW * mat3(sunRot)).rgb * vReflectionInfos.x;
+		#else
+			reflectionColor = textureCube(reflectionCubeSampler, normalize(vColor.rgb) * mat3(sunRot)).rgb * vReflectionInfos.x;
+		#endif
 	#else
 	reflectionColor = textureCube(reflectionCubeSampler, vReflectionUVW).rgb * vReflectionInfos.x;
 	#endif
@@ -334,7 +339,11 @@ void main(void) {
 	reflectionColor *= reflectionLeftColor.rgb * (1.0 - reflectionFresnelTerm) + reflectionFresnelTerm * reflectionRightColor.rgb;
 #endif
 #else
-	reflectionColor *= reflectionLeftColor.rgb * (1.0 - reflectionFresnelTerm) + reflectionFresnelTerm * reflectionRightColor.rgb;
+	#ifdef WATERBUMP
+		reflectionColor *= (reflectionLeftColor.rgb * (1.0 - reflectionFresnelTerm) + reflectionFresnelTerm * reflectionRightColor.rgb) * isWater + (1. - isWater);
+	#else
+		reflectionColor *= reflectionLeftColor.rgb * (1.0 - reflectionFresnelTerm) + reflectionFresnelTerm * reflectionRightColor.rgb;
+	#endif
 #endif
 #endif
 #endif
@@ -412,13 +421,13 @@ void main(void) {
 
 	// Composition
 #ifdef EMISSIVEASILLUMINATION
-	#ifdef WATERBUMP
+	#ifdef SUNROT
 	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + emissiveColor + refractionColor, 0.0, 1.0), alpha);
 	#else
 	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor + finalSpecular + emissiveColor + reflectionColor + refractionColor, 0.0, 1.0), alpha);
 	#endif
 #else
-	#ifdef WATERBUMP
+	#ifdef SUNROT
 	vec4 color = vec4(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + refractionColor, alpha);
 	#else
 	vec4 color = vec4(finalDiffuse * baseAmbientColor + finalSpecular + reflectionColor + refractionColor, alpha);

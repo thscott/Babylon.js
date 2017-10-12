@@ -223,7 +223,6 @@ void main(void) {
 			bm[2][0] = bm[2][0] * -1.2 + 0.5;
 			bm[2][1] = bm[2][1] * -0.7 - 0.5;
 			vBumpUV2 = vec2(bm * vec4(uv, 1.0, 0.0));
-			vNormalW = positionUpdated; // vPositionW;
 		#endif
 	}
 	else
@@ -246,6 +245,10 @@ void main(void) {
 #ifdef VERTEXCOLOR
 	// Vertex color
 	vColor = color;
+#endif
+
+#ifdef GLOBEVIEW
+	vNormalW = positionUpdated; //correct normals
 #endif
 
 #include<pointCloudVertex>
