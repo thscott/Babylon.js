@@ -16,7 +16,8 @@ module BABYLON {
         public SPECULARDIRECTUV = 0;
         public BUMP = false;
         public WATERBUMP = false;
-        public SUNROT = true;
+        public SUNROT = false;
+        public GLOBEVIEW = false;
         public BUMPDIRECTUV = 0;
         public PARALLAX = false;
         public PARALLAXOCCLUSION = false;
@@ -307,6 +308,14 @@ module BABYLON {
         public sunRot: Matrix;
 
         /**
+         * If set to true, will set the normals to the positions (as origin 0,0,0);
+         */
+        @serialize("globeView")
+        private _globeView = false;
+        @expandToProperty("_markAllSubMeshesAsTexturesDirty")
+        public globeView: boolean;
+
+        /**
          * Default configuration related to image processing available in the standard Material.
          */
         protected _imageProcessingConfiguration: ImageProcessingConfiguration;
@@ -557,6 +566,7 @@ module BABYLON {
                 defines._needUVs = false;
                 defines.MAINUV1 = false;
                 defines.MAINUV2 = false;
+                defines.GLOBEVIEW = this.globeView;
                 if (scene.texturesEnabled) {
                     if (this._diffuseTexture && StandardMaterial.DiffuseTextureEnabled) {
                         if (!this._diffuseTexture.isReadyOrNotBlocking()) {
@@ -752,7 +762,7 @@ module BABYLON {
                 }
             }
 
-            // defines.SUNROT = !!this._sunRot;
+            defines.SUNROT = !!this._sunRot;
 
             // Misc.
             MaterialHelper.PrepareDefinesForMisc(mesh, scene, this._useLogarithmicDepth, this.pointsCloud, this.fogEnabled, defines);

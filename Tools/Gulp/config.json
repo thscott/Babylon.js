@@ -172,6 +172,7 @@
             "shadows",
             "loader",
             "offline",
+            "fresnel",
             "multiMaterial",
             "defaultRenderingPipeline",
             "depthRenderer",
