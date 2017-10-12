@@ -197,7 +197,8 @@ void main(void) {
 	#ifdef WATERBUMP
 	// float isWater = step(0., baseColor.b - baseColor.g) * step(0., baseColor.b - baseColor.r);
 	// isWater *= step(0., baseColor.g - baseColor.r); //filter browns
-	float isWater = step(1.15, baseColor.b / baseColor.g) * step(1.3, baseColor.b / baseColor.r);
+	//Adding the 0.001 to avoid possible divide by zero
+	float isWater = step(1.15, baseColor.b / (baseColor.g + 0.001)) * step(1.3, baseColor.b / (baseColor.r + 0.001));
 	// isWater *= step(1.05, baseColor.g / baseColor.r); //filter browns
 	isWater *= step(baseColor.r + baseColor.g + baseColor.b, 2.5); //filter out white
 	isWater += step(baseColor.r + baseColor.g + baseColor.b, 0.05); //* step(baseColor.g / baseColor.r, 1.) * step(baseColor.g / baseColor.b, 1.); //deep black is likely water
@@ -210,8 +211,8 @@ void main(void) {
 
 #include<depthPrePass>
 
-#ifdef VERTEXCOLOR
-	// baseColor.rgb *= vColor.rgb;
+#if defined(VERTEXCOLOR) && !defined(ISMAPTILE)
+	baseColor.rgb *= vColor.rgb;
 #endif
 
 	// Ambient color
@@ -421,13 +422,13 @@ void main(void) {
 
 	// Composition
 #ifdef EMISSIVEASILLUMINATION
-	#ifdef SUNROT
+	#if defined(GLOBEVIEW) || defined(SUNROT)
 	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + emissiveColor + refractionColor, 0.0, 1.0), alpha);
 	#else
 	vec4 color = vec4(clamp(finalDiffuse * baseAmbientColor + finalSpecular + emissiveColor + reflectionColor + refractionColor, 0.0, 1.0), alpha);
 	#endif
 #else
-	#ifdef SUNROT
+	#if defined(GLOBEVIEW) || defined(SUNROT)
 	vec4 color = vec4(finalDiffuse * baseAmbientColor * reflectionColor + finalSpecular + refractionColor, alpha);
 	#else
 	vec4 color = vec4(finalDiffuse * baseAmbientColor + finalSpecular + reflectionColor + refractionColor, alpha);
