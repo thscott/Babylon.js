@@ -164,6 +164,7 @@
             "arcRotateCamera",
             "hemisphericLight",
             "directionalLight",
+            "animations",
             "actions",
             "picking",
             "solidParticles",
