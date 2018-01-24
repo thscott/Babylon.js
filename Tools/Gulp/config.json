@@ -14,7 +14,7 @@
         ],
         "outputCustomConfigurationsDirectory": "../../dist/preview release/customConfigurations",
         "srcOutputDirectory": "../../src/",
-        "currentConfig": "all",
+        "currentConfig": "smaller",
         "typedocJSON": "../../.temp/babylon.typedoc.json",
         "typedocValidationBaseline": "../../dist/preview release/typedocValidationBaseline.json"
     },
