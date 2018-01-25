@@ -74,6 +74,7 @@
             "optimizations",
             "highlights",
             "assetsManager",
+            "dynamicFloatArray",
             "serialization",
             "probes",
             "layer",
@@ -147,6 +148,7 @@
             "optimizations",
             "highlights",
             "assetsManager",
+            "dynamicFloatArray",
             "serialization",
             "probes",
             "layer",
@@ -191,6 +193,7 @@
             "highlights",
             "assetsManager",
             "dynamicFloatArray",
+            "instrumentation",
             "imageProcessing",
             "serialization"
         ]
@@ -952,6 +955,7 @@
                 "additionalMeshes",
                 "core",
                 "stringDictionary",
+                "dynamicFloatArray",
                 "actions"
             ],
             "shaders": []
@@ -1043,6 +1047,14 @@
         "assetsManager": {
             "files": [
                 "../../src/Tools/babylon.assetsManager.js"
+            ],
+            "dependUpon": [
+                "core"
+            ]
+        },
+        "dynamicFloatArray": {
+            "files": [
+                "../../src/Tools/babylon.dynamicFloatArray.js"
             ],
             "dependUpon": [
                 "core"
