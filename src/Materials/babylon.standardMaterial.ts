@@ -578,7 +578,7 @@ module BABYLON {
                 defines._needUVs = false;
                 defines.MAINUV1 = false;
                 defines.MAINUV2 = false;
-                defines.GLOBEVIEW = this.globeView;
+                defines.GLOBEVIEW = this._globeView;
                 defines.ISMAPTILE = this._isMapTile;
                 if (scene.texturesEnabled) {
                     if (this._diffuseTexture && StandardMaterial.DiffuseTextureEnabled) {
