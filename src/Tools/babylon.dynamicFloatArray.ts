@@ -45,7 +45,7 @@
                 this._growBuffer();
             }
 
-            let el = this._freeEntries.pop();
+            let el = this._freeEntries.pop()!;
             this._lastUsed = Math.max(el.offset, this._lastUsed);
 
             if (el.offset === this._firstFree) {
@@ -243,7 +243,7 @@
             return this._stride;
         }
 
-        compareValueOffset: number = null;
+        compareValueOffset: number | null = null;
         sortingAscending: boolean = true;
 
         public sort(): boolean {
@@ -287,12 +287,13 @@
             for (let i = 0; i < count; i++ , curOffset += stride) {
                 let si = this._sortTable[i];
                 if (!si) {
-                    si = new SortInfo();
+                    si = new SortInfo(this.buffer[curOffset + this.compareValueOffset], curOffset);
                     this._sortTable[i] = si;
+                } else {
+                    si.compareData = this.buffer[curOffset + this.compareValueOffset];
+                    si.offset = curOffset;
+                    si.swapedOffset = null;
                 }
-                si.compareData = this.buffer[curOffset + this.compareValueOffset];
-                si.offset = curOffset;
-                si.swapedOffset = null;
 
                 this._sortedTable[i] = si;
             }
@@ -371,13 +372,9 @@
     }
 
     class SortInfo {
-        constructor() {
-            this.compareData = this.offset = this.swapedOffset = null;
+        constructor(public compareData: number, public offset: number, public swapedOffset: number | null = null) {
         }
 
-        compareData: number;
         //entry: DynamicFloatArrayElementInfo;
-        offset: number;
-        swapedOffset: number;
     }
 }
