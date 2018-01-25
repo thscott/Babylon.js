@@ -364,7 +364,7 @@
          * When updating an instance, remember that only line point positions can change, not the number of points, neither the number of lines.      
          * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created.  
          */
-        public static CreateLineSystem(name: string, options: { lines: Vector3[][], updatable: boolean, instance: Nullable<LinesMesh>, colors?: Nullable<Color4[][]>, useVertexAlpha?: boolean }, scene: Nullable<Scene>): LinesMesh {
+        public static CreateLineSystem(name: string, options: { lines: Vector3[][], updatable: boolean, instance?: Nullable<LinesMesh>, colors?: Nullable<Color4[][]>, useVertexAlpha?: boolean }, scene: Nullable<Scene>): LinesMesh {
             var instance = options.instance;
             var lines = options.lines;
             var colors = options.colors;
