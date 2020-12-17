@@ -6581,7 +6581,9 @@ declare module BABYLON {
         SPECULARDIRECTUV: number;
         BUMP: boolean;
         WATERBUMP: boolean;
+        ISMAPTILE: boolean;
         SUNROT: boolean;
+        GLOBEVIEW: boolean;
         BUMPDIRECTUV: number;
         PARALLAX: boolean;
         PARALLAXOCCLUSION: boolean;
@@ -6739,6 +6741,16 @@ declare module BABYLON {
          */
         private _sunRot;
         sunRot: Matrix;
+        /**
+         * If set to true, will set the normals to the positions (as origin 0,0,0);
+         */
+        private _globeView;
+        globeView: boolean;
+        /**
+         * If set to true, will set the normals to the positions (as origin 0,0,0);
+         */
+        private _isMapTile;
+        isMapTile: boolean;
         /**
          * Default configuration related to image processing available in the standard Material.
          */
@@ -7132,6 +7144,15 @@ declare module BABYLON {
 }
 
 declare module BABYLON {
+    class SIMDHelper {
+        private static _isEnabled;
+        static readonly IsEnabled: boolean;
+        static DisableSIMD(): void;
+        static EnableSIMD(): void;
+    }
+}
+
+declare module BABYLON {
     class Scalar {
         /**
          * Boolean : true if the absolute difference between a and b is lower than epsilon (default = 1.401298E-45)
@@ -7238,15 +7259,6 @@ declare module BABYLON {
         * PercentToRange(0.34,0,100) will return 34.
         */
         static PercentToRange(percent: number, min: number, max: number): number;
-    }
-}
-
-declare module BABYLON {
-    class SIMDHelper {
-        private static _isEnabled;
-        static readonly IsEnabled: boolean;
-        static DisableSIMD(): void;
-        static EnableSIMD(): void;
     }
 }
 
@@ -15934,6 +15946,660 @@ declare module BABYLON {
     }
 }
 
+/** @hidden */
+export declare var anaglyphPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/backgroundFragmentDeclaration";
+import "./ShadersInclude/backgroundUboDeclaration";
+import "./ShadersInclude/reflectionFunction";
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/lightsFragmentFunctions";
+import "./ShadersInclude/shadowsFragmentFunctions";
+import "./ShadersInclude/imageProcessingFunctions";
+import "./ShadersInclude/clipPlaneFragmentDeclaration";
+import "./ShadersInclude/fogFragmentDeclaration";
+import "./ShadersInclude/clipPlaneFragment";
+import "./ShadersInclude/lightFragment";
+import "./ShadersInclude/fogFragment";
+/** @hidden */
+export declare var backgroundPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/backgroundVertexDeclaration";
+import "./ShadersInclude/backgroundUboDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/clipPlaneVertexDeclaration";
+import "./ShadersInclude/fogVertexDeclaration";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+import "./ShadersInclude/clipPlaneVertex";
+import "./ShadersInclude/fogVertex";
+import "./ShadersInclude/shadowsVertex";
+/** @hidden */
+export declare var backgroundVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var blackAndWhitePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bloomMergePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var blurPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var chromaticAberrationPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var circleOfConfusionPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/clipPlaneFragmentDeclaration";
+import "./ShadersInclude/clipPlaneFragment";
+/** @hidden */
+export declare var colorPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/clipPlaneVertexDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+import "./ShadersInclude/clipPlaneVertex";
+/** @hidden */
+export declare var colorVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var colorCorrectionPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var convolutionPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/defaultFragmentDeclaration";
+import "./ShadersInclude/defaultUboDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/lightsFragmentFunctions";
+import "./ShadersInclude/shadowsFragmentFunctions";
+import "./ShadersInclude/fresnelFunction";
+import "./ShadersInclude/reflectionFunction";
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/imageProcessingFunctions";
+import "./ShadersInclude/bumpFragmentFunctions";
+import "./ShadersInclude/clipPlaneFragmentDeclaration";
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/fogFragmentDeclaration";
+import "./ShadersInclude/clipPlaneFragment";
+import "./ShadersInclude/bumpFragment";
+import "./ShadersInclude/depthPrePass";
+import "./ShadersInclude/lightFragment";
+import "./ShadersInclude/logDepthFragment";
+import "./ShadersInclude/fogFragment";
+/** @hidden */
+export declare var defaultPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/defaultVertexDeclaration";
+import "./ShadersInclude/defaultUboDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/bumpVertexDeclaration";
+import "./ShadersInclude/clipPlaneVertexDeclaration";
+import "./ShadersInclude/fogVertexDeclaration";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/morphTargetsVertexGlobalDeclaration";
+import "./ShadersInclude/morphTargetsVertexDeclaration";
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/morphTargetsVertex";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+import "./ShadersInclude/bumpVertex";
+import "./ShadersInclude/clipPlaneVertex";
+import "./ShadersInclude/fogVertex";
+import "./ShadersInclude/shadowsVertex";
+import "./ShadersInclude/pointCloudVertex";
+import "./ShadersInclude/logDepthVertex";
+/** @hidden */
+export declare var defaultVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var depthPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+/** @hidden */
+export declare var depthVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var depthBoxBlurPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var depthOfFieldPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var depthOfFieldMergePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var displayPassPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/helperFunctions";
+/** @hidden */
+export declare var extractHighlightsPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var filterPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fxaaPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fxaaVertexShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/mrtFragmentDeclaration";
+/** @hidden */
+export declare var geometryPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+/** @hidden */
+export declare var geometryVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var glowBlurPostProcessPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var glowMapGenerationPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/morphTargetsVertexGlobalDeclaration";
+import "./ShadersInclude/morphTargetsVertexDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/morphTargetsVertex";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+/** @hidden */
+export declare var glowMapGenerationVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var glowMapMergePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var glowMapMergeVertexShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/clipPlaneFragmentDeclaration2";
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/imageProcessingFunctions";
+import "./ShadersInclude/clipPlaneFragment";
+/** @hidden */
+export declare var gpuRenderParticlesPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/clipPlaneVertexDeclaration2";
+import "./ShadersInclude/clipPlaneVertex";
+/** @hidden */
+export declare var gpuRenderParticlesVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var gpuUpdateParticlesPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var gpuUpdateParticlesVertexShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/helperFunctions";
+/** @hidden */
+export declare var grainPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var highlightsPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/imageProcessingFunctions";
+/** @hidden */
+export declare var imageProcessingPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/kernelBlurVaryingDeclaration";
+import "./ShadersInclude/kernelBlurFragment";
+import "./ShadersInclude/kernelBlurFragment2";
+/** @hidden */
+export declare var kernelBlurPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/kernelBlurVaryingDeclaration";
+import "./ShadersInclude/kernelBlurVertex";
+/** @hidden */
+export declare var kernelBlurVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var layerPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var layerVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lensFlarePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lensFlareVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lensHighlightsPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var linePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lineVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var motionBlurPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var noisePixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/logDepthFragment";
+/** @hidden */
+export declare var outlinePixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+import "./ShadersInclude/logDepthVertex";
+/** @hidden */
+export declare var outlineVertexShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/clipPlaneFragmentDeclaration";
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/imageProcessingFunctions";
+import "./ShadersInclude/clipPlaneFragment";
+/** @hidden */
+export declare var particlesPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/clipPlaneVertexDeclaration";
+import "./ShadersInclude/clipPlaneVertex";
+/** @hidden */
+export declare var particlesVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var passPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var passCubePixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/pbrFragmentDeclaration";
+import "./ShadersInclude/pbrUboDeclaration";
+import "./ShadersInclude/pbrFragmentExtraDeclaration";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/pbrFragmentSamplersDeclaration";
+import "./ShadersInclude/imageProcessingDeclaration";
+import "./ShadersInclude/clipPlaneFragmentDeclaration";
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/fogFragmentDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/pbrHelperFunctions";
+import "./ShadersInclude/imageProcessingFunctions";
+import "./ShadersInclude/shadowsFragmentFunctions";
+import "./ShadersInclude/harmonicsFunctions";
+import "./ShadersInclude/pbrDirectLightingSetupFunctions";
+import "./ShadersInclude/pbrDirectLightingFalloffFunctions";
+import "./ShadersInclude/pbrBRDFFunctions";
+import "./ShadersInclude/pbrDirectLightingFunctions";
+import "./ShadersInclude/pbrIBLFunctions";
+import "./ShadersInclude/bumpFragmentFunctions";
+import "./ShadersInclude/reflectionFunction";
+import "./ShadersInclude/clipPlaneFragment";
+import "./ShadersInclude/bumpFragment";
+import "./ShadersInclude/depthPrePass";
+import "./ShadersInclude/lightFragment";
+import "./ShadersInclude/logDepthFragment";
+import "./ShadersInclude/fogFragment";
+import "./ShadersInclude/pbrDebug";
+/** @hidden */
+export declare var pbrPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/pbrVertexDeclaration";
+import "./ShadersInclude/pbrUboDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/harmonicsFunctions";
+import "./ShadersInclude/bumpVertexDeclaration";
+import "./ShadersInclude/clipPlaneVertexDeclaration";
+import "./ShadersInclude/fogVertexDeclaration";
+import "./ShadersInclude/lightFragmentDeclaration";
+import "./ShadersInclude/lightUboDeclaration";
+import "./ShadersInclude/morphTargetsVertexGlobalDeclaration";
+import "./ShadersInclude/morphTargetsVertexDeclaration";
+import "./ShadersInclude/logDepthDeclaration";
+import "./ShadersInclude/morphTargetsVertex";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+import "./ShadersInclude/bumpVertex";
+import "./ShadersInclude/clipPlaneVertex";
+import "./ShadersInclude/fogVertex";
+import "./ShadersInclude/shadowsVertex";
+import "./ShadersInclude/logDepthVertex";
+/** @hidden */
+export declare var pbrVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var postprocessVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var proceduralVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var refractionPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/helperFunctions";
+/** @hidden */
+export declare var rgbdDecodePixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/helperFunctions";
+/** @hidden */
+export declare var rgbdEncodePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var shadowMapPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/bonesDeclaration";
+import "./ShadersInclude/morphTargetsVertexGlobalDeclaration";
+import "./ShadersInclude/morphTargetsVertexDeclaration";
+import "./ShadersInclude/instancesDeclaration";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/morphTargetsVertex";
+import "./ShadersInclude/instancesVertex";
+import "./ShadersInclude/bonesVertex";
+/** @hidden */
+export declare var shadowMapVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var sharpenPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/fogFragmentDeclaration";
+import "./ShadersInclude/fogFragment";
+/** @hidden */
+export declare var spritesPixelShader: {
+    name: string;
+    shader: string;
+};
+
+import "./ShadersInclude/fogVertexDeclaration";
+/** @hidden */
+export declare var spritesVertexShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var ssaoPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var ssao2PixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var ssaoCombinePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var standardPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var stereoscopicInterlacePixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var tonemapPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var volumetricLightScatteringPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var volumetricLightScatteringPassPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var vrDistortionCorrectionPixelShader: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var vrMultiviewToSingleviewPixelShader: {
+    name: string;
+    shader: string;
+};
+
 declare module BABYLON {
     class AutoRotationBehavior implements Behavior<ArcRotateCamera> {
         readonly name: string;
@@ -16221,178 +16887,6 @@ declare module BABYLON {
 }
 
 declare module BABYLON {
-    class VRCameraMetrics {
-        hResolution: number;
-        vResolution: number;
-        hScreenSize: number;
-        vScreenSize: number;
-        vScreenCenter: number;
-        eyeToScreenDistance: number;
-        lensSeparationDistance: number;
-        interpupillaryDistance: number;
-        distortionK: number[];
-        chromaAbCorrection: number[];
-        postProcessScaleFactor: number;
-        lensCenterOffset: number;
-        compensateDistortion: boolean;
-        readonly aspectRatio: number;
-        readonly aspectRatioFov: number;
-        readonly leftHMatrix: Matrix;
-        readonly rightHMatrix: Matrix;
-        readonly leftPreViewMatrix: Matrix;
-        readonly rightPreViewMatrix: Matrix;
-        static GetDefault(): VRCameraMetrics;
-    }
-}
-
-declare module BABYLON {
-    class VRDeviceOrientationFreeCamera extends DeviceOrientationCamera {
-        constructor(name: string, position: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
-        getClassName(): string;
-    }
-    class VRDeviceOrientationGamepadCamera extends VRDeviceOrientationFreeCamera {
-        constructor(name: string, position: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
-        getClassName(): string;
-    }
-    class VRDeviceOrientationArcRotateCamera extends ArcRotateCamera {
-        constructor(name: string, alpha: number, beta: number, radius: number, target: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
-        getClassName(): string;
-    }
-}
-
-declare module BABYLON {
-    class VRExperienceHelper {
-        private webVROptions;
-        private _scene;
-        private _position;
-        private _btnVR;
-        private _webVRsupported;
-        private _webVRready;
-        private _webVRrequesting;
-        private _webVRpresenting;
-        private _fullscreenVRpresenting;
-        private _canvas;
-        private _webVRCamera;
-        private _vrDeviceOrientationCamera;
-        private _deviceOrientationCamera;
-        private _onKeyDown;
-        private _onVrDisplayPresentChange;
-        private _onVRDisplayChanged;
-        private _onVRRequestPresentStart;
-        private _onVRRequestPresentComplete;
-        constructor(scene: Scene, webVROptions?: WebVROptions);
-        private isInVRMode();
-        private onVrDisplayPresentChange();
-        private onVRDisplayChanged(eventArgs);
-        private updateButtonVisibility();
-        /**
-         * Attempt to enter VR. If a headset is connected and ready, will request present on that.
-         * Otherwise, will use the fullscreen API.
-         */
-        enterVR(): void;
-        /**
-         * Attempt to exit VR, or fullscreen.
-         */
-        exitVR(): void;
-        position: Vector3;
-        dispose(): void;
-        getClassName(): string;
-    }
-}
-
-declare var HMDVRDevice: any;
-declare var VRDisplay: any;
-declare var VRFrameData: any;
-declare module BABYLON {
-    /**
-     * This is a copy of VRPose.
-     * IMPORTANT!! The data is right-hand data.
-     * @export
-     * @interface DevicePose
-     */
-    interface DevicePose {
-        readonly position?: Float32Array;
-        readonly linearVelocity?: Float32Array;
-        readonly linearAcceleration?: Float32Array;
-        readonly orientation?: Float32Array;
-        readonly angularVelocity?: Float32Array;
-        readonly angularAcceleration?: Float32Array;
-    }
-    interface PoseControlled {
-        position: Vector3;
-        rotationQuaternion: Quaternion;
-        devicePosition?: Vector3;
-        deviceRotationQuaternion: Quaternion;
-        rawPose: DevicePose;
-        deviceScaleFactor: number;
-        updateFromDevice(poseData: DevicePose): any;
-    }
-    interface WebVROptions {
-        trackPosition?: boolean;
-        positionScale?: number;
-        displayName?: string;
-        controllerMeshes?: boolean;
-        defaultLightingOnControllers?: boolean;
-    }
-    class WebVRFreeCamera extends FreeCamera implements PoseControlled {
-        private webVROptions;
-        _vrDevice: any;
-        rawPose: DevicePose;
-        private _onVREnabled;
-        private _specsVersion;
-        private _attached;
-        private _oldSize;
-        private _oldHardwareScaleFactor;
-        private _frameData;
-        private _quaternionCache;
-        private _positionOffset;
-        protected _descendants: Array<Node>;
-        devicePosition: Vector3;
-        deviceRotationQuaternion: any;
-        deviceScaleFactor: number;
-        controllers: Array<WebVRController>;
-        onControllersAttachedObservable: Observable<WebVRController[]>;
-        rigParenting: boolean;
-        private _lightOnControllers;
-        constructor(name: string, position: Vector3, scene: Scene, webVROptions?: WebVROptions);
-        dispose(): void;
-        getControllerByName(name: string): WebVRController;
-        private _leftController;
-        readonly leftController: WebVRController;
-        private _rightController;
-        readonly rightController: WebVRController;
-        getForwardRay(length?: number): Ray;
-        _checkInputs(): void;
-        updateFromDevice(poseData: DevicePose): void;
-        /**
-         * WebVR's attach control will start broadcasting frames to the device.
-         * Note that in certain browsers (chrome for example) this function must be called
-         * within a user-interaction callback. Example:
-         * <pre> scene.onPointerDown = function() { camera.attachControl(canvas); }</pre>
-         *
-         * @param {HTMLElement} element
-         * @param {boolean} [noPreventDefault]
-         *
-         * @memberOf WebVRFreeCamera
-         */
-        attachControl(element: HTMLElement, noPreventDefault?: boolean): void;
-        detachControl(element: HTMLElement): void;
-        getClassName(): string;
-        resetToCurrentRotation(): void;
-        _updateRigCameras(): void;
-        /**
-         * This function is called by the two RIG cameras.
-         * 'this' is the left or right camera (and NOT (!!!) the WebVRFreeCamera instance)
-         */
-        protected _getWebVRViewMatrix(): Matrix;
-        protected _getWebVRProjectionMatrix(): Matrix;
-        private _onGamepadConnectedObserver;
-        private _onGamepadDisconnectedObserver;
-        initControllers(): void;
-    }
-}
-
-declare module BABYLON {
     class ArcRotateCameraGamepadInput implements ICameraInput<ArcRotateCamera> {
         camera: ArcRotateCamera;
         gamepad: Gamepad;
@@ -16608,6 +17102,178 @@ declare module BABYLON {
         detachControl(element: HTMLElement): void;
         getClassName(): string;
         getSimpleName(): string;
+    }
+}
+
+declare module BABYLON {
+    class VRCameraMetrics {
+        hResolution: number;
+        vResolution: number;
+        hScreenSize: number;
+        vScreenSize: number;
+        vScreenCenter: number;
+        eyeToScreenDistance: number;
+        lensSeparationDistance: number;
+        interpupillaryDistance: number;
+        distortionK: number[];
+        chromaAbCorrection: number[];
+        postProcessScaleFactor: number;
+        lensCenterOffset: number;
+        compensateDistortion: boolean;
+        readonly aspectRatio: number;
+        readonly aspectRatioFov: number;
+        readonly leftHMatrix: Matrix;
+        readonly rightHMatrix: Matrix;
+        readonly leftPreViewMatrix: Matrix;
+        readonly rightPreViewMatrix: Matrix;
+        static GetDefault(): VRCameraMetrics;
+    }
+}
+
+declare module BABYLON {
+    class VRDeviceOrientationFreeCamera extends DeviceOrientationCamera {
+        constructor(name: string, position: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
+        getClassName(): string;
+    }
+    class VRDeviceOrientationGamepadCamera extends VRDeviceOrientationFreeCamera {
+        constructor(name: string, position: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
+        getClassName(): string;
+    }
+    class VRDeviceOrientationArcRotateCamera extends ArcRotateCamera {
+        constructor(name: string, alpha: number, beta: number, radius: number, target: Vector3, scene: Scene, compensateDistortion?: boolean, vrCameraMetrics?: VRCameraMetrics);
+        getClassName(): string;
+    }
+}
+
+declare module BABYLON {
+    class VRExperienceHelper {
+        private webVROptions;
+        private _scene;
+        private _position;
+        private _btnVR;
+        private _webVRsupported;
+        private _webVRready;
+        private _webVRrequesting;
+        private _webVRpresenting;
+        private _fullscreenVRpresenting;
+        private _canvas;
+        private _webVRCamera;
+        private _vrDeviceOrientationCamera;
+        private _deviceOrientationCamera;
+        private _onKeyDown;
+        private _onVrDisplayPresentChange;
+        private _onVRDisplayChanged;
+        private _onVRRequestPresentStart;
+        private _onVRRequestPresentComplete;
+        constructor(scene: Scene, webVROptions?: WebVROptions);
+        private isInVRMode();
+        private onVrDisplayPresentChange();
+        private onVRDisplayChanged(eventArgs);
+        private updateButtonVisibility();
+        /**
+         * Attempt to enter VR. If a headset is connected and ready, will request present on that.
+         * Otherwise, will use the fullscreen API.
+         */
+        enterVR(): void;
+        /**
+         * Attempt to exit VR, or fullscreen.
+         */
+        exitVR(): void;
+        position: Vector3;
+        dispose(): void;
+        getClassName(): string;
+    }
+}
+
+declare var HMDVRDevice: any;
+declare var VRDisplay: any;
+declare var VRFrameData: any;
+declare module BABYLON {
+    /**
+     * This is a copy of VRPose.
+     * IMPORTANT!! The data is right-hand data.
+     * @export
+     * @interface DevicePose
+     */
+    interface DevicePose {
+        readonly position?: Float32Array;
+        readonly linearVelocity?: Float32Array;
+        readonly linearAcceleration?: Float32Array;
+        readonly orientation?: Float32Array;
+        readonly angularVelocity?: Float32Array;
+        readonly angularAcceleration?: Float32Array;
+    }
+    interface PoseControlled {
+        position: Vector3;
+        rotationQuaternion: Quaternion;
+        devicePosition?: Vector3;
+        deviceRotationQuaternion: Quaternion;
+        rawPose: DevicePose;
+        deviceScaleFactor: number;
+        updateFromDevice(poseData: DevicePose): any;
+    }
+    interface WebVROptions {
+        trackPosition?: boolean;
+        positionScale?: number;
+        displayName?: string;
+        controllerMeshes?: boolean;
+        defaultLightingOnControllers?: boolean;
+    }
+    class WebVRFreeCamera extends FreeCamera implements PoseControlled {
+        private webVROptions;
+        _vrDevice: any;
+        rawPose: DevicePose;
+        private _onVREnabled;
+        private _specsVersion;
+        private _attached;
+        private _oldSize;
+        private _oldHardwareScaleFactor;
+        private _frameData;
+        private _quaternionCache;
+        private _positionOffset;
+        protected _descendants: Array<Node>;
+        devicePosition: Vector3;
+        deviceRotationQuaternion: any;
+        deviceScaleFactor: number;
+        controllers: Array<WebVRController>;
+        onControllersAttachedObservable: Observable<WebVRController[]>;
+        rigParenting: boolean;
+        private _lightOnControllers;
+        constructor(name: string, position: Vector3, scene: Scene, webVROptions?: WebVROptions);
+        dispose(): void;
+        getControllerByName(name: string): WebVRController;
+        private _leftController;
+        readonly leftController: WebVRController;
+        private _rightController;
+        readonly rightController: WebVRController;
+        getForwardRay(length?: number): Ray;
+        _checkInputs(): void;
+        updateFromDevice(poseData: DevicePose): void;
+        /**
+         * WebVR's attach control will start broadcasting frames to the device.
+         * Note that in certain browsers (chrome for example) this function must be called
+         * within a user-interaction callback. Example:
+         * <pre> scene.onPointerDown = function() { camera.attachControl(canvas); }</pre>
+         *
+         * @param {HTMLElement} element
+         * @param {boolean} [noPreventDefault]
+         *
+         * @memberOf WebVRFreeCamera
+         */
+        attachControl(element: HTMLElement, noPreventDefault?: boolean): void;
+        detachControl(element: HTMLElement): void;
+        getClassName(): string;
+        resetToCurrentRotation(): void;
+        _updateRigCameras(): void;
+        /**
+         * This function is called by the two RIG cameras.
+         * 'this' is the left or right camera (and NOT (!!!) the WebVRFreeCamera instance)
+         */
+        protected _getWebVRViewMatrix(): Matrix;
+        protected _getWebVRProjectionMatrix(): Matrix;
+        private _onGamepadConnectedObserver;
+        private _onGamepadDisconnectedObserver;
+        initControllers(): void;
     }
 }
 
@@ -18870,6 +19536,390 @@ declare module BABYLON.Internals {
         private static CalcProjectionSpherical(vDir, float32Array, inputWidth, inputHeight);
     }
 }
+
+/** @hidden */
+export declare var backgroundFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var backgroundUboDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var backgroundVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bones300Declaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bonesDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bonesVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bumpFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bumpFragmentFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bumpVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var bumpVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneFragmentDeclaration2: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var clipPlaneVertexDeclaration2: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var defaultFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var defaultUboDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var defaultVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var depthPrePass: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fogFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fogFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fogVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fogVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var fresnelFunction: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var harmonicsFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var helperFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var imageProcessingDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var imageProcessingFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var instances300Declaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var instancesDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var instancesVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var kernelBlurFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var kernelBlurFragment2: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var kernelBlurVaryingDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var kernelBlurVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lightFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lightFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lightUboDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var lightsFragmentFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var logDepthDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var logDepthFragment: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var logDepthVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var morphTargetsVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var morphTargetsVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var morphTargetsVertexGlobalDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var mrtFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrBRDFFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrDebug: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrDirectLightingFalloffFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrDirectLightingFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrDirectLightingSetupFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrFragmentDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrFragmentExtraDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrFragmentSamplersDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrHelperFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrIBLFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrUboDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pbrVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pointCloudVertex: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var pointCloudVertexDeclaration: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var reflectionFunction: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var shadowsFragmentFunctions: {
+    name: string;
+    shader: string;
+};
+
+/** @hidden */
+export declare var shadowsVertex: {
+    name: string;
+    shader: string;
+};
 
 declare module BABYLON {
     class CustomProceduralTexture extends ProceduralTexture {

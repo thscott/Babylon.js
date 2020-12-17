@@ -167,6 +167,7 @@
             "animations",
             "actions",
             "picking",
+            "sprites",
             "solidParticles",
             "meshBuilder",
             "additionalTextures",
@@ -190,7 +191,9 @@
             "assetsManager",
             "dynamicFloatArray",
             "imageProcessing",
-            "serialization"
+            "serialization",
+            "loaders/babylon.objFileLoader.js",
+            "loaders/babylon.glTF2FileLoader.js"
         ]
     },
     "workloads": {

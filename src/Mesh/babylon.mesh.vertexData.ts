@@ -328,20 +328,28 @@
         }
 
         private _mergeElement(source: number[] | Float32Array, other: number[] | Float32Array, length = 0): number[] | Float32Array {
-            if (!other && !source) {
-                return null;
+            // if (!other && !source) {
+            //     return null;
+            // }
+
+            // if (!other) {
+            //     return this._mergeElement(source, new Float32Array(source.length), length);
+            // }
+
+            // if (!source) {
+            //     if (length === other.length) {
+            //         return other;
+            //     }
+
+            //     return this._mergeElement(new Float32Array(length - other.length), other, length);
+            // }
+
+            if (!source) {
+                return other;
             }
 
             if (!other) {
-                return this._mergeElement(source, new Float32Array(source.length), length);
-            }
-
-            if (!source) {
-                if (length === other.length) {
-                    return other;
-                }
-
-                return this._mergeElement(new Float32Array(length - other.length), other, length);
+                return source;
             }
 
             var len = other.length + source.length;

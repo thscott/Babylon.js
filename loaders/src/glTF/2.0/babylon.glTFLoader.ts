@@ -408,21 +408,21 @@ module BABYLON.GLTF2 {
                                 return;
                             }
 
-                            this._loadMaterial(material, (babylonMaterial, isNew) => {
-                                if (isNew && this._parent.onMaterialLoaded) {
-                                    this._parent.onMaterialLoaded(babylonMaterial);
-                                }
+                            // this._loadMaterial(material, (babylonMaterial, isNew) => {
+                            //     if (isNew && this._parent.onMaterialLoaded) {
+                            //         this._parent.onMaterialLoaded(babylonMaterial);
+                            //     }
 
-                                if (this._parent.onBeforeMaterialReadyAsync) {
-                                    this._addLoaderPendingData(material);
-                                    this._parent.onBeforeMaterialReadyAsync(babylonMaterial, node.babylonMesh, babylonMultiMaterial.subMaterials[i] != null, () => {
-                                        babylonMultiMaterial.subMaterials[i] = babylonMaterial;
-                                        this._removeLoaderPendingData(material);
-                                    });
-                                } else {
-                                    babylonMultiMaterial.subMaterials[i] = babylonMaterial;
-                                }
-                            });
+                            //     if (this._parent.onBeforeMaterialReadyAsync) {
+                            //         this._addLoaderPendingData(material);
+                            //         this._parent.onBeforeMaterialReadyAsync(babylonMaterial, node.babylonMesh, babylonMultiMaterial.subMaterials[i] != null, () => {
+                            //             babylonMultiMaterial.subMaterials[i] = babylonMaterial;
+                            //             this._removeLoaderPendingData(material);
+                            //         });
+                            //     } else {
+                            //         babylonMultiMaterial.subMaterials[i] = babylonMaterial;
+                            //     }
+                            // });
                         }
                     });
 

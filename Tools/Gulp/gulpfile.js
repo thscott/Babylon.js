@@ -18,7 +18,7 @@ var expect = require('gulp-expect-file');
 var optimisejs = require('gulp-optimize-js');
 var webserver = require('gulp-webserver');
 var path = require('path');
-var sass = require('gulp-sass');
+// var sass = require('gulp-sass');
 var webpack = require('webpack-stream');
 
 var zip = require('gulp-zip');
@@ -336,9 +336,9 @@ var buildExternalLibrary = function (library, settings, watch) {
 
     var outputDirectory = config.build.outputDirectory + settings.build.distOutputDirectory;
     var css = gulp.src(library.sassFiles || [])
-        .pipe(sass().on('error', sass.logError))
-        .pipe(concat(library.output.replace(".js", ".css")))
-        .pipe(gulp.dest(outputDirectory));
+        // .pipe(sass().on('error', sass.logError))
+        // .pipe(concat(library.output.replace(".js", ".css")))
+        // .pipe(gulp.dest(outputDirectory));
 
     if (watch) {
         return merge2([shader, includeShader, dev, css]);
